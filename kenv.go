@@ -38,7 +38,7 @@ func Load(envFiles ...string) {
 				if r.Text()[0] == '#' {
 					continue
 				}
-				
+
 				key, val, found := strings.Cut(r.Text(), "=")
 				if !found {
 					continue
@@ -83,13 +83,9 @@ func fillStructFromEnv(s reflect.Value) error {
 			tag := t
 			defau := ""
 			required := false
-			if strings.Contains(t, "|") {
-				sp := strings.Split(t, "|")
-				if len(sp) == 2 {
-					tag = sp[0]
-					defau = sp[1]
-
-				}
+			if spTag, spDefau, ok := strings.Cut(t, "|"); ok {
+				tag = spTag
+				defau = spDefau
 			} else {
 				required = true
 			}

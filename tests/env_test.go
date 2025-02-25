@@ -10,9 +10,10 @@ import (
 
 type Config struct {
 	Host   string `kenv:"HOST|localhost"`
-	Secret string `kenv:"SECRET|"`
-	Id     string `kenv:"ID|"`
-	Code   string `kenv:"CODE|"`
+	Secret string `kenv:"SECRET|-"`
+	Id     int    `kenv:"ID|100"`
+	Code   string `kenv:"CODE"`
+	Ref    uint   `kenv:"REF"`
 }
 
 func Test_load_env_file(t *testing.T) {
@@ -22,7 +23,31 @@ func Test_load_env_file(t *testing.T) {
 	kenv.Fill(&cfg)
 
 	if cfg.Host != "127.0.0.1" {
-		t.Logf("config %+v \n", cfg)
+		t.Logf("config host %+v \n", cfg)
+		t.Fail()
+		return
+	}
+
+	if cfg.Secret != "MiU3czRkS3U8Zg==" {
+		t.Logf("config secret %+v \n", cfg)
+		t.Fail()
+		return
+	}
+
+	if cfg.Code != "=TMP+=" {
+		t.Logf("config code %+v \n", cfg)
+		t.Fail()
+		return
+	}
+
+	if cfg.Id != 100 {
+		t.Logf("config id %+v \n", cfg)
+		t.Fail()
+		return
+	}
+
+	if cfg.Ref != 200 {
+		t.Logf("config ref %+v \n", cfg)
 		t.Fail()
 		return
 	}
@@ -36,7 +61,7 @@ func Test_load_env_trim_space(t *testing.T) {
 	kenv.Load(".env")
 	kenv.Fill(&cfg)
 
-	if cfg.Id != "100" {
+	if cfg.Id != 100 {
 		t.Logf("config %+v \n", cfg)
 		t.Fail()
 		return
